@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float turnSpeed = 20f;
     Rigidbody m_Rigidbody;
     AudioSource m_AudioSource;
+    public float speed = 1f;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         m_Movement.Set(-horizontal, 0f, -vertical);
@@ -43,10 +45,16 @@ public class PlayerMovement : MonoBehaviour
         }
         Vector3 desiredForward = Vector3.RotateTowards(transform.forward, m_Movement, turnSpeed * Time.deltaTime, 0f);
         m_Rotation = Quaternion.LookRotation(desiredForward);
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+    {   
+        speed = 2f;
+    }  else{
+        speed = 1f;
+    }
         
     }
     void OnAnimatorMove(){
-        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
+        m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude * speed);
         m_Rigidbody.MoveRotation(m_Rotation);
     }
    
